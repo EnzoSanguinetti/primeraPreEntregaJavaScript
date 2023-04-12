@@ -3,7 +3,7 @@ alert("calculemos cuanto vale cada prenda si le agregamos el IVA, pero antes le 
 let usuario = prompt("Cree su nombre de usuario:");
 let contrasena = prompt("Cree su contraseña:");
 let intentos = 3;
-let tipoPrenda, precio;
+let tipoPrenda, precio, precioConIVA;
 
 const IVA = 0.22; // valor del IVA en Uruguay
 
@@ -14,65 +14,50 @@ function verificarCredenciales() {
 }
 
 if (verificarCredenciales()) {
-  tipoPrenda = prompt("Ingrese el tipo de prenda (remera, pantalon o buzo):");
-  precio = parseFloat(prompt("Ingrese el precio de la prenda:"));
+  let carrito = []; // array para almacenar las prendas 
+  let continuar = true;
 
-  switch (tipoPrenda.toLowerCase()) {
-    case "remera":
-      precioConIVA = precio * (1 + IVA);
-      alert(`El precio de la remera con IVA es: ${precioConIVA}`);
-      break;
-    case "pantalon":
-      precioConIVA = precio * (1 + IVA);
-      alert(`El precio del pantalon con IVA es: ${precioConIVA}`);
-      break;
-    case "buzo":
-      precioConIVA = precio * (1 + IVA);
-      alert(`El precio del buzo con IVA es: ${precioConIVA}`);
-      break;
-    default:
-      alert(`Tipo de prenda no reconocida.`);
-  }
-
-  let eleccion = true;
-
-while (eleccion) {
-  let respuesta = prompt("¿Desea elegir otra prenda? (si/no)");
-
-  if (respuesta.toLowerCase() === "si") {
+  while (continuar) {
     tipoPrenda = prompt("Ingrese el tipo de prenda (remera, pantalon o buzo):");
     precio = parseFloat(prompt("Ingrese el precio de la prenda:"));
 
     switch (tipoPrenda.toLowerCase()) {
       case "remera":
         precioConIVA = precio * (1 + IVA);
+        carrito.push({ tipo: "remera", precioConIVA: precioConIVA });
         alert(`El precio de la remera con IVA es: ${precioConIVA}`);
         break;
       case "pantalon":
         precioConIVA = precio * (1 + IVA);
+        carrito.push({ tipo: "pantalon", precioConIVA: precioConIVA });
         alert(`El precio del pantalon con IVA es: ${precioConIVA}`);
         break;
       case "buzo":
         precioConIVA = precio * (1 + IVA);
+        carrito.push({ tipo: "buzo", precioConIVA: precioConIVA });
         alert(`El precio del buzo con IVA es: ${precioConIVA}`);
         break;
       default:
         alert(`Tipo de prenda no reconocida.`);
-      }
+    }
 
-  } else if (respuesta.toLowerCase() === "no") {
-    eleccion = false;
-    alert("Gracias por usar nuestra app!")
-  } else {
-    alert("Por favor, ingrese una respuesta válida (s/n)");
-  }
+    let respuesta = prompt("¿Desea elegir otra prenda? (si/no)");
+    if (respuesta.toLowerCase() === "no") {
+      continuar = false;
+      let total = 0;
+      carrito.forEach(prenda => {
+        total += prenda.precioConIVA;
+      });
+      alert(`Contenido del carrito: ${JSON.stringify(carrito)}. Total con IVA: ${total}`);
+      alert("gracias por usar nuestra app!");
+    } else if (respuesta.toLowerCase() !== "si") {
+      alert("Por favor, ingrese una respuesta válida (si/no)");
+    }
+  } 
 
-}
-  
 } else {
   console.log("Usuario o Contraseña inválidos");
   alert("Usuario o contraseña inválidos, por favor recarga el sitio web.");
 }
-
-// No pude generar un ciclo en el que me permita volver a iniciar sesion y declaré que se recarge la página en el alert.
-
+  
+  
