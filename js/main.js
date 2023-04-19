@@ -1,9 +1,10 @@
-alert("calculemos cuanto vale cada prenda si le agregamos el IVA, pero antes le pedimos que se registre.");
+alert("Calculemos cuánto vale cada prenda si le agregamos el IVA, pero antes le pedimos que se registre.");
 
 let usuario = prompt("Cree su nombre de usuario:");
 let contrasena = prompt("Cree su contraseña:");
 let intentos = 3;
 let tipoPrenda, precio, precioConIVA;
+let carrito = []; // array para almacenar las prendas
 
 const IVA = 0.22; // valor del IVA en Uruguay
 
@@ -14,7 +15,7 @@ function verificarCredenciales() {
 }
 
 if (verificarCredenciales()) {
-  let carrito = []; // array para almacenar las prendas 
+
   let continuar = true;
 
   while (continuar) {
@@ -48,8 +49,34 @@ if (verificarCredenciales()) {
       carrito.forEach(prenda => {
         total += prenda.precioConIVA;
       });
+
+      // Guardar contenido del carrito en almacenamiento
+      localStorage.setItem("carrito", JSON.stringify(carrito));
+      localStorage.setItem("total", total);
+
       alert(`Contenido del carrito: ${JSON.stringify(carrito)}. Total con IVA: ${total}`);
-      alert("gracias por usar nuestra app!");
+
+      let div = document.createElement("div");
+      let h1 = document.createElement("h1");
+      let h3 = document.createElement("h3");
+      let ul = document.createElement("ul");
+
+      h1.innerText = "Contenido del carrito";
+      h3.innerText = `Total con IVA: ${total}`;
+
+      carrito.forEach(prenda => {
+        let li = document.createElement("li");
+        li.innerText = `${prenda.tipo}: ${prenda.precioConIVA}`;
+        ul.appendChild(li);
+      });
+
+      div.appendChild(h1);
+      div.appendChild(h3);
+      div.appendChild(ul);
+
+      document.body.appendChild(div);
+
+      alert("¡Gracias por usar nuestra app!");
     } else if (respuesta.toLowerCase() !== "si") {
       alert("Por favor, ingrese una respuesta válida (si/no)");
     }
@@ -59,5 +86,3 @@ if (verificarCredenciales()) {
   console.log("Usuario o Contraseña inválidos");
   alert("Usuario o contraseña inválidos, por favor recarga el sitio web.");
 }
-  
-  
