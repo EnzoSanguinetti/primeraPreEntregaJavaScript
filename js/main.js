@@ -1,88 +1,137 @@
-alert("Calculemos cuánto vale cada prenda si le agregamos el IVA, pero antes le pedimos que se registre.");
+let listaPrendas = JSON.parse(localStorage.getItem('prendas')) || [];
 
-let usuario = prompt("Cree su nombre de usuario:");
-let contrasena = prompt("Cree su contraseña:");
-let intentos = 3;
-let tipoPrenda, precio, precioConIVA;
-let carrito = []; // array para almacenar las prendas
+// Función para agregar una prenda a la lista
+function agregarPrenda() {
+  const inputPrenda = document.getElementById('prenda');
+  const inputPrecio = document.getElementById('precio');
 
-const IVA = 0.22; // valor del IVA en Uruguay
+  const prenda = inputPrenda.value;
+  const precio = parseFloat(inputPrecio.value);
 
-function verificarCredenciales() {
-  let usuarioIngresado = prompt("Ingrese su nombre de usuario:");
-  let contrasenaIngresada = prompt("Ingrese su contraseña:");
-  return usuario === usuarioIngresado && contrasena === contrasenaIngresada;
+  // Verifica que se hayan ingresado datos válidos
+  if (!prenda || isNaN(precio) || precio <= 0) {
+    return;
+  }
+
+  // Agrega la prenda a la lista
+  listaPrendas.push({ prenda, precio });
+
+  // Guarda la lista actualizada en el localStorage
+  localStorage.setItem('prendas', JSON.stringify(listaPrendas));
+
+  // Actualiza la lista de prendas en el DOM
+  mostrarPrendas();
+  // Actualiza el subtotal, el IVA y el total en el DOM
+  calcularTotales();
+  // Limpia los campos de ingreso de datos
+  inputPrenda.value = '';
+  inputPrecio.value = '';
 }
 
-if (verificarCredenciales()) {
+// Función para mostrar la lista de prendas en el DOM
+function mostrarPrendas() {
+  const listaElemento = document.getElementById('lista-prendas');
+  // Limpia la lista anterior
+  listaElemento.innerHTML = '';
+  let i = 0;
+  while (i < listaPrendas.length) {
+    const prenda = listaPrendas[i];
+    const li = document.createElement('li');
+    li.textContent = `${prenda.prenda} - $${prenda.precio.toFixed(2)}`;
+    listaElemento.appendChild(li);
+    i++;
+  }
+}
 
-  let continuar = true;
+// Función para calcular y mostrar los totales en el DOM
+function calcularTotales() {
+  const subtotalElemento = document.getElementById('subtotal');
+  const ivaElemento = document.getElementById('iva');
+  const totalElemento = document.getElementById('total');
 
-  while (continuar) {
-    tipoPrenda = prompt("Ingrese el tipo de prenda (remera, pantalon o buzo):");
-    precio = parseFloat(prompt("Ingrese el precio de la prenda:"));
+  let subtotal = 0;
+  let i = 0;
+  // Recorre la lista de prendas y suma los precios
+  while (i < listaPrendas.length) {
+    subtotal += listaPrendas[i].precio;
+    i++;
+  }
+  const iva = subtotal * 0.16;
+  const total = subtotal + iva;
 
-    switch (tipoPrenda.toLowerCase()) {
-      case "remera":
-        precioConIVA = precio * (1 + IVA);
-        carrito.push({ tipo: "remera", precioConIVA: precioConIVA });
-        alert(`El precio de la remera con IVA es: ${precioConIVA}`);
-        break;
-      case "pantalon":
-        precioConIVA = precio * (1 + IVA);
-        carrito.push({ tipo: "pantalon", precioConIVA: precioConIVA });
-        alert(`El precio del pantalon con IVA es: ${precioConIVA}`);
-        break;
-      case "buzo":
-        precioConIVA = precio * (1 + IVA);
-        carrito.push({ tipo: "buzo", precioConIVA: precioConIVA });
-        alert(`El precio del buzo con IVA es: ${precioConIVA}`);
-        break;
-      default:
-        alert(`Tipo de prenda no reconocida.`);
-    }
+  // Muestra los totales en el DOM
+  subtotalElemento.textContent = `Subtotal: $${subtotal.toFixed(2)}`;
+  ivaElemento.textContent = `IVA: $${iva.toFixed(2)}`;
+  totalElemento.textContent = `Total a pagar: $${total.toFixed(2)}`;
+}
 
-    let respuesta = prompt("¿Desea elegir otra prenda? (si/no)");
-    if (respuesta.toLowerCase() === "no") {
-      continuar = false;
-      let total = 0;
-      carrito.forEach(prenda => {
-        total += prenda.precioConIVA;
-      });
+// Agrega un evento click al botón "Agregar"
+const botonAgregar = document.getElementById('agregar');
+botonAgregar.addEventListener('click', agregarPrenda);
 
-      // Guardar contenido del carrito en almacenamiento
-      localStorage.setItem("carrito", JSON.stringify(carrito));
-      localStorage.setItem("total", total);
+// Si la lista de prendas no está vacía, muestra las prendas y los totales en el DOM
+if (listaPrendas.length > 0) {
+mostrarPrendas();
+calcularTotales();
+}
 
-      alert(`Contenido del carrito: ${JSON.stringify(carrito)}. Total con IVA: ${total}`);
+// Función para agregar una prenda a la lista
+function agregarPrenda() {
+const inputPrenda = document.getElementById('prenda');
+const inputPrecio = document.getElementById('precio');
 
-      let div = document.createElement("div");
-      let h1 = document.createElement("h1");
-      let h3 = document.createElement("h3");
-      let ul = document.createElement("ul");
+const prenda = inputPrenda.value;
+const precio = parseFloat(inputPrecio.value);
 
-      h1.innerText = "Contenido del carrito";
-      h3.innerText = `Total con IVA: ${total}`;
+// Verifica que se hayan ingresado datos válidos
+if (!prenda || isNaN(precio) || precio <= 0) {
+return;
+}
 
-      carrito.forEach(prenda => {
-        let li = document.createElement("li");
-        li.innerText = `${prenda.tipo}: ${prenda.precioConIVA}`;
-        ul.appendChild(li);
-      });
+// Agrega la prenda a la lista
+listaPrendas.push({ prenda, precio });
 
-      div.appendChild(h1);
-      div.appendChild(h3);
-      div.appendChild(ul);
+// Guarda la lista actualizada en el localStorage
+localStorage.setItem('prendas', JSON.stringify(listaPrendas));
 
-      document.body.appendChild(div);
+// Actualiza la lista de prendas en el DOM
+mostrarPrendas();
+// Actualiza el subtotal, el IVA y el total en el DOM
+calcularTotales();
+// Limpia los campos de ingreso de datos
+inputPrenda.value = '';
+inputPrecio.value = '';
+}
 
-      alert("¡Gracias por usar nuestra app!");
-    } else if (respuesta.toLowerCase() !== "si") {
-      alert("Por favor, ingrese una respuesta válida (si/no)");
-    }
-  } 
+// Función para mostrar la lista de prendas en el DOM
+function mostrarPrendas() {
+const listaElemento = document.getElementById('lista-prendas');
+// Limpia la lista anterior
+listaElemento.innerHTML = '';
+// Recorre la lista de prendas y crea un elemento <li> para cada una
+for (const prenda of listaPrendas) {
+const li = document.createElement('li');
+li.textContent = `${prenda.prenda} - $${prenda.precio.toFixed(2)}`;
+listaElemento.appendChild(li);
+}
+}
 
-} else {
-  console.log("Usuario o Contraseña inválidos");
-  alert("Usuario o contraseña inválidos, por favor recarga el sitio web.");
+// Función para calcular y mostrar los totales en el DOM
+function calcularTotales() {
+const subtotalElemento = document.getElementById('subtotal');
+const ivaElemento = document.getElementById('iva');
+const totalElemento = document.getElementById('total');
+
+let subtotal = 0;
+// Recorre la lista de prendas y suma los precios
+for (const prenda of listaPrendas) {
+subtotal += prenda.precio;
+}
+const iva = subtotal * 0.16;
+const total = subtotal + iva;
+
+// Muestra los totales en el DOM
+subtotalElemento.textContent = `Subtotal: $${subtotal.toFixed(2)}`;
+ivaElemento.textContent = `IVA: $${iva.toFixed(2)}`;
+totalElemento.textContent = `Total a pagar: $${total.toFixed(2)}`;
 }
