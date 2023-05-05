@@ -1,0 +1,26 @@
+[
+  {
+    "precio": 879,
+    "id": 1,
+    "title": "Remera",
+    "thumbnailUrl": "https://f.fcdn.app/imgs/0dbc4c/www.zooko.com.uy/zoo/4b94/webp/catalogo/ADGN3495-000-1/1920-1200/remera-adidas-3-stripes-tee-000.jpg"
+  },
+  {
+    "precio": 989,
+    "id": 2,
+    "title": "Pantalón",
+    "thumbnailUrl": "https://f.fcdn.app/imgs/7c4b88/www.stadium.com.uy/std/878b/webp/catalogo/054.052306122/700_600/pantalon-diagonal-kids-marino-blanco.jpg"
+  },
+  {
+    "precio": 1899,
+    "id": 3,
+    "title": "Buzo",
+    "thumbnailUrl": "https://m.media-amazon.com/images/I/51EYIIqC+rL._AC_UL1000_.jpg"
+  },
+  {
+    "precio": 2000,
+    "id": 4,
+    "title": "Calzado",
+    "thumbnailUrl": "https://f.fcdn.app/imgs/e985e1/laisla.com.uy/isl/2364/original/catalogo/169953C169953C2/1500-1500/championes-converse-chuck-70-hi-championes-converse-chuck-70-hi.jpg"
+  }
+]
