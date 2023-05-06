@@ -1,4 +1,4 @@
-//Lo inicio con live server para q se visualice bien.
+//Lo inicio con live server (go live) para q se visualice bien.
 const cards = document.getElementById('cards')
 const items = document.getElementById('items')
 const footer = document.getElementById('footer')
@@ -113,12 +113,29 @@ const pintarFooter = () => {
     botonComprar.classList.add('btn', 'btn-success', 'mx-2')
 
     botonComprar.addEventListener('click', () => {
-        carrito = {}
-        pintarCarrito()
+        Swal.fire({
+            title: '¿Estás seguro de realizar la compra?',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonText: 'Confirmar',
+            cancelButtonText: 'Cancelar',
+          }).then((result) => {
+            if (result.isConfirmed) {
+                Swal.fire({
+                    title: '¡Hecho!',
+                    text: 'La compra se realizó con éxito',
+                    icon: 'success',
+                    confirmButtonText: 'Aceptar'
+                  });
+                  
+                carrito = {}
+                pintarCarrito()
+            }
+          })
     })
-
     botonVaciar.insertAdjacentElement('afterend', botonComprar)
 }
+
 
 
     const nCantidad = Object.values(carrito).reduce((acc, { cantidad }) => acc + cantidad, 0)
